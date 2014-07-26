@@ -52,13 +52,13 @@
 ;; To-Do:
 ;;  - compile/syntax-check/verify? (suggested by R.Goldman)
 ;;  - indentation - splitting lines at logical operators (M. Rangarajan)
-;;    [ This might "devolve" to indentation after "->" or ";" 
+;;    [ This might "devolve" to indentation after "->" or ";"
 ;;      being as is, but anything else indent even more? ]
 ;;       :: SomeReallyLongArrayRef[this].typedefField != SomeReallyLongConstant -> /* some-comment */
 ;;    [ Suggestion would be to break the first line after the !=, therefore: ]
-;;       :: SomeReallyLongArrayRef[this].typedefField 
+;;       :: SomeReallyLongArrayRef[this].typedefField
 ;;	      != SomeReallyLongConstant -> /* some-comment */
-;;    [ at this point I'm not so sure about this change... EE: 2001/05/19 ] 
+;;    [ at this point I'm not so sure about this change... EE: 2001/05/19 ]
 
 ;;; -------------------------------------------------------------------------
 ;;; Code:
@@ -112,17 +112,17 @@ should also insert the matching closing delmiter character.")
 (require 'font-lock)
 
 ;; BLECH!  YUCK!   I just wish these guys could agree to something....
-;; Faces available in:         ntemacs emacs  xemacs xemacs xemacs    
+;; Faces available in:         ntemacs emacs  xemacs xemacs xemacs
 ;;     font-lock- xxx -face     20.6   19.34  19.16   20.x   21.x
-;;       -builtin-                X                             
-;;       -constant-               X                             
+;;       -builtin-                X
+;;       -constant-               X
 ;;       -comment-                X      X      X      X      X
 ;;       -doc-string-                           X      X      X
 ;;       -function-name-          X      X      X      X      X
 ;;       -keyword-                X      X      X      X      X
 ;;       -preprocessor-                         X      X      X
 ;;       -reference-                     X      X      X      X
-;;       -signal-name-                          X      X!20.0 
+;;       -signal-name-                          X      X!20.0
 ;;       -string-                 X      X      X      X      X
 ;;       -type-                   X      X      X      X      X
 ;;       -variable-name-          X      X      X      X      X
@@ -141,7 +141,7 @@ should also insert the matching closing delmiter character.")
        '((t (:foreground "blue" :italic nil :underline t)))
        "Face Lock mode face used to highlight preprocessor statements."
        :group 'font-lock-highlighting-faces)))
-  
+
   (defvar font-lock-reference-face 'font-lock-reference-face
     "Face name to use for constants and reference and label names.")
   ;; For consistency try to define the reference face == constant face
@@ -161,19 +161,19 @@ should also insert the matching closing delmiter character.")
 
   )
 
-;; send-poll "symbol" face is custom to promela-mode 
+;; send-poll "symbol" face is custom to promela-mode
 ;; but check for existence to allow someone to override it
 (defvar promela-fl-send-poll-face 'promela-fl-send-poll-face
   "Face name to use for Promela Send or Poll symbols: `!' or `?'")
 (copy-face (if promela-xemacsp 'modeline 'region)
            'promela-fl-send-poll-face)
 
-;; some emacs-en don't define or have regexp-opt available.  
+;; some emacs-en don't define or have regexp-opt available.
 (unless (functionp 'regexp-opt)
   (defmacro regexp-opt (strings)
     "Cheap imitation of `regexp-opt' since it's not availble in this emacs"
     `(mapconcat 'identity ,strings "\\|")))
-  
+
 
 ;; -------------------------------------------------------------------------
 ;; promela-mode font lock specifications/regular-expressions
@@ -195,14 +195,14 @@ should also insert the matching closing delmiter character.")
 
 ;; set each of those three variables now..
 (let ((promela-keywords
-       (eval-when-compile 
-         (regexp-opt 
+       (eval-when-compile
+         (regexp-opt
           '("active" "assert" "atomic" "break" "d_step"
             "do" "dproctype" "else" "empty" "enabled"
             "eval" "fi" "full" "goto" "hidden" "if" "init"
             "inline" "len" "local" "mtype" "nempty" "never"
             "nfull" "od" "of" "pcvalue" "printf" "priority"
-            "proctype" "provided" "run" "show" "skip" 
+            "proctype" "provided" "run" "show" "skip"
             "timeout" "trace" "typedef" "unless" "xr" "xs"))))
       (promela-types
        (eval-when-compile
@@ -286,7 +286,7 @@ should also insert the matching closing delmiter character.")
             nil nil
             (1 'font-lock-variable-name-face) ;; nil t)
             (2 font-lock-reference-face nil t)))
-    
+
     ;; Typedef/hidden types and declarations
     '("\\<\\(typedef\\|hidden\\)\\>[ \t]*\\(\\sw+\\)?"
       ;;(1 'font-lock-keyword-face nil)
@@ -328,7 +328,7 @@ If (match-beginning 2) is non-nil, the item is followed by a `value'."
 ;; FMI: look up 'font-lock-defaults
 (defconst promela-font-lock-defaults
   '(
-    (promela-font-lock-keywords 
+    (promela-font-lock-keywords
      promela-font-lock-keywords-1
      promela-font-lock-keywords-2
      promela-font-lock-keywords-3)		  ;; font-lock stuff (keywords)
@@ -408,7 +408,7 @@ If (match-beginning 2) is non-nil, the item is followed by a `value'."
   (define-key promela-mode-map "]" 		'promela-close-delimiter)
   (define-key promela-mode-map ";"		'promela-insert-and-indent)
   (define-key promela-mode-map ":"		'promela-insert-and-indent)
-  ;; 
+  ;;
   ;; this is preliminary at best - use at your own risk:
   (define-key promela-mode-map "\C-c\C-s"	'promela-syntax-check)
   ;;
@@ -626,7 +626,7 @@ See variable `promela-auto-insert-matching-delimiter'"
 ;; Compilation/Verification functions
 
 ;; all of this is in serious "beta" mode - don't trust it ;-)
-(setq 
+(setq
         promela-compile-command		"spin "
         promela-syntax-check-args	"-a -v "
 )
@@ -717,7 +717,7 @@ Return the amount the by which the indentation changed."
        ;;((and (>= paren-depth 1) (not (char-equal ?\{ paren-char)))
        ;; (goto-char paren-point)
        ;; (1+ (current-column)))
-       ;; 
+       ;;
        ;; Last option: indent relative to contaning block(s)
        (t
         (goto-char orig-point)
@@ -790,7 +790,7 @@ current line is to be regarded as part of a block comment."
           ;; leave indent alone
           (current-column)
         ;; otherwise look back for _PREVIOUS_ possible nested comment start
-        (let ((comment-start (save-excursion 
+        (let ((comment-start (save-excursion
                                (re-search-backward comment-start-skip))))
           ;; and see if there is an appropriate middle-comment "*"
           (if (re-search-backward "^[ \t]+\\*" comment-start t)
